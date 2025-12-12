@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
-import './App.css';
+import Child from './Child';
 
 function App() {
-  const [name, setName] = useState('');
+  const [ dataFromChild, setDataFromChild] = useState(null);
+  
+  const handleDataFromChild = (data) => {
+    setDataFromChild(data);
+}
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Hello, ${name}!`);
-  };
-
-  return (
-    <div className="App">
-      <h1>Simple React Form</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required/>
-        <button type="submit">Submit</button>
-      </form>
+  return(
+      <div>
+            <Child onDataFromChild = {handleDataFromChild} />
+            <p> Data from child component : {dataFromChild} </p>
     </div>
-  );
+    );
 }
 
 export default App;
