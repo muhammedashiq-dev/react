@@ -5,9 +5,17 @@ function Book() {
     const [bookName,setBookName] = useState("");
     const [authorName,setAuthorName] =  useState("");
     const [publishDate,setPublishDate] = useState("");
-    const [books,setBooks] = useState([]);
+    const [books,setBooks] = useState([
+  { id: 1, bookname: "Clean Code", authorname: "Robert C. Martin", publishdate: "2008-08-01" },
+  { id: 2, bookname: "The Pragmatic Programmer", authorname: "Andrew Hunt", publishdate: "1999-10-20" },
+  { id: 3, bookname: "You Don’t Know JS", authorname: "Kyle Simpson", publishdate: "2015-12-27" },
+  { id: 4, bookname: "Introduction to Algorithms", authorname: "Thomas H. Cormen", publishdate: "2009-07-31" },
+  { id: 5, bookname: "Design Patterns", authorname: "Erich Gamma", publishdate: "1994-10-21" }
+]
+);
     const [editBook,setEditBook] =  useState("");
     const [editId,setEditId] = useState(null);
+    const [searchTerm,setSearchTerm] =  useState("");
 
     function handleSubmit(event){
         event.preventDefault();
@@ -52,6 +60,13 @@ const handleDelete = (id) => {
  setBooks(filteredBook);
 }
 
+const handleSearchBook = (event) => {
+    event.preventDefault();
+    const updatedBook = books.filter((book)=>
+    book.bookname.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setBooks(updatedBook);
+}
     return(
         <div>
         <Navbar/>
@@ -114,6 +129,10 @@ const handleDelete = (id) => {
                          )))}
                         </tbody>
                     </table>
+                    <form onSubmit={handleSearchBook}>
+                        <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+                        <button type="submit" className="btn btn-secondary">Search</button>
+                    </form>
                 </div>
             </div>
         </div>
