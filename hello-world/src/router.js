@@ -2,13 +2,17 @@ import { createBrowserRouter } from "react-router-dom";
 import Aboutus from "./components/Aboutus";
 import App from "./App";
 import Greetings from "./components/Greetings";
-import Crud from "./components/Crud"
+import Crud from "./components/Crud";
+import ListPost from "./components/blog/ListPost";
+import Book from "./components/bookmanagement/Book";
 
 const router = createBrowserRouter([
     { path: 'App', element: <App/> },
     { path: 'aboutus', element: <Aboutus/> },
     { path: 'greeting/:name', element: <Greetings/>},
-    {path: '',element:<Crud/>}
+    {path: '',element:<Crud/>},
+    {path:'blog/posts',element:<ListPost/>},
+    {path:'book',element:<Book/>}
 ]);
 
 export default router;

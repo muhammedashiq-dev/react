@@ -8,7 +8,18 @@ function Crud() {
         { id : 3, name : "William" }
 ]);
 
-const [itemName, setItemName ] = useState(" ");
+const [itemName, setItemName ] = useState("");
+
+const [editingItemId, setEditingItemId] = useState(null);
+const [editingItemName,setEditingItemName] = useState("");
+const [searchTerm,setSearchTerm] = useState("");
+
+
+const handleEditItem = (item) => {
+    setEditingItemId(item.id);
+    setEditingItemName(item.name);
+}
+
 
 const handleInputChange = (event ) => {
     setItemName(event.target.value);
@@ -25,7 +36,35 @@ const handleSubmit = ( event ) => {
     setItemName(" ");
     };
 
+    function handleDelete(id){
+        const filteredItems = items.filter((item) => item.id !== id);
+        setItems(filteredItems);
+    }
 
+    const handleSaveItem = () => {
+        if(editingItemName.trim() !== ""){
+            const updatedItems = items.map((item)=>{
+                if(item.id === editingItemId){
+                    return{...item , name:editingItemName};
+                }
+                return item;
+            });
+            setItems(updatedItems);
+            setEditingItemId(null);
+        }
+    }
+
+    const cancelItem = () => {
+        setEditingItemId(null);
+        setEditingItemName("");
+    };
+    const searchItem = (event) => {
+        event.preventDefault();
+        const filteredItems = items.filter((item) => (
+            item.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+        ));
+        setItems(filteredItems);
+    }
 return (
     <div>
     <div> <Navbar/> </div><br/>
@@ -41,21 +80,48 @@ return (
         </div>
         </div>
         </div><br/>
+        <div className="container">
+                <div className="row">
+                    <div className="col-md-8">
+                        <form onSubmit={searchItem}>
+                            <label>Search Name: </label>
+                            <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />&nbsp;
+                            <button className="btn btn-small btn-success" type="submit">Search</button>&nbsp;
+                        </form>
+                    </div>
+                    </div>
+                    </div>
 <div className="container">
     <table className =" table table-bordered table-dark">
-        <tr>
+        <tr>                                            
             <th>ID</th>
             <th>Name</th>
-            <th>Action</th>
+            <th colSpan={2}>Action</th>
         </tr>
         {items.map((item) => (
         <tr key={item.id}>
             <td>{item.id}</td>
-            <td>{item.name}</td>
             <td>
-              <button className="btn btn-danger">Delete</button>
-               <button className="btn btn-primary"> Edit </button>
+                {editingItemId === item.id? (
+                    <input type="text" value={editingItemName } className="form-control" onChange={(e) => setEditingItemName(e.target.value)}/>
+                ):(
+                    item.name
+                )}
             </td>
+            <td>
+              <button className="btn btn-danger" onClick={()=>handleDelete(item.id)}>Delete</button></td>
+             <td>{editingItemId === item.id ? (
+                <>
+                <button className="btn btn-primary" onClick={handleSaveItem}>
+                    Save
+                </button>
+                <button className="btn btn-secondary" onClick={cancelItem}>Cancel</button>
+                </>
+             ) : (
+                <>
+                <button className="btn btn-primary" onClick={()=>{handleEditItem(item)}}>Edit</button>
+                </>
+             ) }</td>
         </tr>
         ))}
 </table>
@@ -65,3 +131,5 @@ return (
 }
 
 export default Crud;
+
+ 
